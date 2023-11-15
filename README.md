@@ -1,4 +1,4 @@
-# electric_service
+# style_coaching
 
 A new Flutter project.
 
