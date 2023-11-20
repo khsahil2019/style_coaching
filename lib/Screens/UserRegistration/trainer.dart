@@ -31,8 +31,10 @@ class _TrainerRegisterScreenState extends State<TrainerRegisterScreen> {
   final TextEditingController _chargesController = TextEditingController();
   final TextEditingController _skillController = TextEditingController();
   final TextEditingController _extraController = TextEditingController();
+  final TextEditingController _aimController = TextEditingController();
   String? _selectedGender;
   String? _selectedUser;
+  String? _selectedLevel;
   String? _countryName;
 
   String? _selectedTargetGender;
@@ -44,6 +46,7 @@ class _TrainerRegisterScreenState extends State<TrainerRegisterScreen> {
 
   final List<String> _gendersList = ['Male', 'Female', 'Other'];
   final List<String> _userList = ['Trainer', 'Trainee', 'PlaceHolder'];
+  final List<String> _levelList = ['Beginner', 'Intermediate', 'Advanced'];
 
   final Map<String, bool> _ageGroups = {
     'Kids (6-12)': false,
@@ -68,11 +71,21 @@ class _TrainerRegisterScreenState extends State<TrainerRegisterScreen> {
     'Swimming',
     'Others'
   ];
+  List PreferredList = [
+    'Football',
+    'Basketball',
+    'Tennis',
+    'Swimming',
+    'Others'
+  ];
   bool _isExpanded = false;
+  bool _isExpanded1 = false;
 
   List<bool> isSpecializationList = List.filled(29, false);
+  List<bool> isPreferredSportList = List.filled(29, false);
 
   List selectedSpecialization = [];
+  List selectedPreferredSport = [];
   TimeOfDay _selectedStartTime = TimeOfDay(hour: 8, minute: 0);
   TimeOfDay _selectedEndTime = TimeOfDay(hour: 18, minute: 0);
   File? _imageFile;
@@ -149,6 +162,21 @@ class _TrainerRegisterScreenState extends State<TrainerRegisterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  CustomDropdown(
+                    heading: 'Registering youself As?',
+                    subHeading: "Select User Type",
+                    options: _userList,
+                    selectedValue:
+                        _selectedUser, // Set your initial selected value
+                    onChanged: (String? value) {
+                      setState(() {
+                        _selectedUser = value;
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
                   TextWidget(
                       heading: "Full Name",
                       hint: "Enter the Name",
@@ -223,33 +251,15 @@ class _TrainerRegisterScreenState extends State<TrainerRegisterScreen> {
                   const SizedBox(
                     height: 15,
                   ),
-                  CustomDropdown(
-                    heading: 'Registering youself As?',
-                    subHeading: "Select User Type",
-                    options: _userList,
-                    selectedValue:
-                        _selectedUser, // Set your initial selected value
-                    onChanged: (String? value) {
-                      setState(() {
-                        _selectedUser = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
                   _selectedUser == "Trainer"
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Sports Specialization",
                               style: TextStyle(color: Colors.purple),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             GestureDetector(
@@ -284,7 +294,7 @@ class _TrainerRegisterScreenState extends State<TrainerRegisterScreen> {
                                             Container(
                                                 margin:
                                                     EdgeInsets.only(top: 20),
-                                                child: Icon(
+                                                child: const Icon(
                                                     Icons.arrow_drop_down)),
                                           ],
                                         ),
@@ -330,6 +340,107 @@ class _TrainerRegisterScreenState extends State<TrainerRegisterScreen> {
                                             }
                                           }
                                           isSpecializationList[index] = value;
+                                        });
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                          ],
+                        )
+                      : SizedBox(),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  _selectedUser == "Trainee"
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Preferred Sport(s) for Learning",
+                              style: TextStyle(color: Colors.purple),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _isExpanded1 = !_isExpanded1;
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(color: Colors.grey),
+                                      ),
+                                      child: DropdownButtonHideUnderline(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Text(
+                                                selectedPreferredSport.isEmpty
+                                                    ? "Select Preferred Sport(s) for Learning"
+                                                    : "You are Selected ${selectedPreferredSport.length} Preferred Sports",
+                                              ),
+                                            ),
+                                            Container(
+                                                margin:
+                                                    EdgeInsets.only(top: 20),
+                                                child: const Icon(
+                                                    Icons.arrow_drop_down)),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (_isExpanded1)
+                              AnimatedContainer(
+                                //width: 300,
+                                height: 200,
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey)),
+                                duration: Duration(milliseconds: 300),
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: ScrollPhysics(),
+                                  itemCount: PreferredList.length,
+                                  itemBuilder: (context, index) {
+                                    return CheckboxListTile(
+                                      autofocus: true,
+                                      checkColor: Colors.white,
+                                      title: Text(PreferredList[index]),
+                                      value: isPreferredSportList[index],
+                                      selected: isPreferredSportList[index],
+                                      dense: true,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          if (value!) {
+                                            if (!selectedPreferredSport
+                                                .contains(
+                                                    PreferredList[index])) {
+                                              selectedPreferredSport
+                                                  .add(PreferredList[index]);
+                                            }
+                                          } else {
+                                            if (selectedPreferredSport.contains(
+                                                PreferredList[index])) {
+                                              selectedPreferredSport
+                                                  .remove(PreferredList[index]);
+                                            }
+                                          }
+                                          isPreferredSportList[index] = value;
                                         });
                                       },
                                     );
@@ -471,6 +582,9 @@ class _TrainerRegisterScreenState extends State<TrainerRegisterScreen> {
                                     ],
                                   )
                                 : const SizedBox(),
+                            SizedBox(
+                              height: 20,
+                            )
                           ],
                         )
                       : SizedBox(),
@@ -517,53 +631,84 @@ class _TrainerRegisterScreenState extends State<TrainerRegisterScreen> {
                                     }).toList(),
                                   )
                                 : const SizedBox(),
+                            SizedBox(
+                              height: 20,
+                            )
                           ],
                         )
                       : SizedBox(),
-                  const SizedBox(
-                    height: 15,
+                  _selectedUser == "Trainer"
+                      ? TextWidget(
+                          heading: "Something extra ordinary",
+                          hint: "Enter Something extra ordinary",
+                          keyboardType: TextInputType.name,
+                          controller: _extraController)
+                      : SizedBox(),
+                  _selectedUser == "Trainer"
+                      ? TextWidget(
+                          heading: "Specific Skills or Techniques Taught",
+                          hint: "Enter Specific Skills",
+                          keyboardType: TextInputType.name,
+                          controller: _skillController)
+                      : SizedBox(),
+                  _selectedUser == "Trainer"
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Do you provide pick and drop facility?',
+                              style: TextStyle(color: Colors.purple),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Switch(
+                                  value: providePickAndDrop,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      providePickAndDrop = newValue;
+                                    });
+                                  },
+                                ),
+                                Text(providePickAndDrop
+                                    ? 'Providing Pick and Drop'
+                                    : 'Not Providing Pick and Drop'),
+                              ],
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
+                  _selectedUser == "Trainee"
+                      ? CustomDropdown(
+                          heading: 'Skill Level',
+                          subHeading: "Select Level",
+                          options: _levelList,
+                          selectedValue:
+                              _selectedLevel, // Set your initial selected value
+                          onChanged: (String? value) {
+                            setState(() {
+                              _selectedLevel = value;
+                            });
+                          },
+                        )
+                      : SizedBox(),
+                  SizedBox(
+                    height: 20,
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  TextWidget(
-                      heading: "Something extra ordinary",
-                      hint: "Enter Something extra ordinary",
-                      keyboardType: TextInputType.name,
-                      controller: _extraController),
-                  TextWidget(
-                      heading: "Specific Skills or Techniques Taught",
-                      hint: "Enter Specific Skills",
-                      keyboardType: TextInputType.name,
-                      controller: _skillController),
-                  const Text(
-                    'Do you provide pick and drop facility?',
-                    style: TextStyle(color: Colors.purple),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Switch(
-                        value: providePickAndDrop,
-                        onChanged: (newValue) {
-                          setState(() {
-                            providePickAndDrop = newValue;
-                          });
-                        },
-                      ),
-                      Text(providePickAndDrop
-                          ? 'Providing Pick and Drop'
-                          : 'Not Providing Pick and Drop'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  TextWidget(
-                      heading: "Charges per Hours",
-                      hint: "Enter Charges",
-                      keyboardType: TextInputType.number,
-                      controller: _chargesController),
+                  _selectedUser == "Trainee"
+                      ? TextWidget(
+                          heading: "Goals or Objectives for Learning the Sport",
+                          hint: "Enter Your Goals",
+                          keyboardType: TextInputType.name,
+                          controller: _aimController)
+                      : SizedBox(),
+                  _selectedUser == "Trainer"
+                      ? TextWidget(
+                          heading: "Charges per Hours",
+                          hint: "Enter Charges",
+                          keyboardType: TextInputType.number,
+                          controller: _chargesController)
+                      : SizedBox(),
                   const SizedBox(height: 20),
                   Center(
                     child: SizedBox(
