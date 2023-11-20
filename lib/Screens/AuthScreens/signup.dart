@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:style_coaching/Screens/AuthScreens/signin.dart';
+import 'package:style_coaching/Screens/HomePage/home.dart';
+import 'package:style_coaching/Screens/HomePage/homeScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -165,6 +167,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: MediaQuery.of(context).size.width - 180,
                 child: ElevatedButton(
                   onPressed: () {
+                    Get.to(Home());
                     // handle login logic
                   },
                   style: ElevatedButton.styleFrom(
