@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:style_coaching/Screens/AuthScreens/signin.dart';
+import 'package:style_coaching/Screens/HomePage/home.dart';
+import 'package:style_coaching/Screens/HomePage/homeScreen.dart';
+import 'package:style_coaching/Screens/UserRegistration/property.dart';
+import 'package:style_coaching/Screens/UserRegistration/trainee.dart';
 import 'package:style_coaching/Screens/UserRegistration/trainer.dart';
+import 'package:style_coaching/Screens/UserRegistration/userChoice.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -18,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) =>
-              TrainerRegisterScreen(), // Replace 'NextScreen' with your main screen
+              UserChoiceScreen(), // Replace 'NextScreen' with your main screen
         ),
       );
     });
